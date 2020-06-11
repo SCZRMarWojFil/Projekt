@@ -46,10 +46,11 @@ int _kbhit() {
 
 // Predefinied sizes of images
 #define IMG_WIDTH 1280
-#define IMG_HEIGHT 853
+#define IMG_HEIGHT 720
 
 // Pathname of shm
 #define SHM_PATH "/myshm"
+#define SHM_PATH2 "/myshm2"
 
 // Definition of a structure that will be imposed on the shared memory object
 struct shmbuf
