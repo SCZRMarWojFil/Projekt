@@ -1,4 +1,4 @@
-// g++ data_processing_client.cpp pshm.h -o data_processing_client `pkg-config opencv --cflags --libs` -lrt -pthread
+// g++ data_processing.cpp pshm.h -o data_processing `pkg-config opencv --cflags --libs` -lrt -pthread
 #include "pshm.h"
 #include <time.h>
 #include <ctype.h>
@@ -74,13 +74,8 @@ int main(){
 	if (sem_post(&shmp->sem2) == -1)
 	    errExit("sem_post");
 
-	//imwrite(name, image);
 	cv::blur(image, image, cv::Size(7, 7), cv::Point(-1,-1));
 
-	//cv::namedWindow(name, CV_WINDOW_AUTOSIZE);
-	//cv::imshow(name, image);
-	//cv::waitKey(30);
-	
 	clock_t start = clock();
 
         for(int i = 0; i < image.rows; i++){
