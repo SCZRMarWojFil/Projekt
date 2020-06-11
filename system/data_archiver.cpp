@@ -25,7 +25,7 @@ int main()
 	// Sending loop
 	while(!_kbhit()){
 	++counter;
-	sprintf(name, "/home/filip/archive_sczr/%d", counter);
+	sprintf(name, "/home/archive_sczr/%d", counter);
 	name = strcat(name, ".jpg\0");
 
 	/* Wait for 'sem1' to be posted by peer before touching
