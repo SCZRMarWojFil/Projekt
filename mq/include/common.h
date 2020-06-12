@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define QUEUE_NAME  "/test_queue2"
+#define QUEUE_NAME  "/test_queue"
 #define MAX_QUEUE_SIZE 2000000
 #define QUEUE_SIZE_CEILING 5000000
 #define MSG_STOP    "exit"
 #define MAX_IMAGE_SIZE 900000
 #define MAX_MSGS 2
+#define PRODUCER_RATE 100    //Hz
+#define N_LOOPS 1000
 
 
 #define CHECK(x) \

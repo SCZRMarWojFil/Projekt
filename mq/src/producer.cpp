@@ -10,6 +10,8 @@
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <thread>
+#include <unistd.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -38,6 +40,7 @@ Mat get_image(string image_path)
 
 int main(int argc, char **argv)
 {
+    cout << "PRODUCER PROCESS ID: " << getpid() <<endl;
     mqd_t mq;
     struct mq_attr attr;
     msg_buffer msg_out;
@@ -59,25 +62,30 @@ int main(int argc, char **argv)
 
     cout <<  "image.data size:" << sizeof(image.data)<< endl;
     size_t sizeInBytes = image.total() * image.elemSize();
-    cout << "image total byte size: " << image.total() << endl;
-    msg_out.total_size = sizeInBytes;
+    cout << "image total byte size: " << image.total() << endl << "loop started ... ";
 
-    memcpy(msg_out.image_data, image.data, sizeInBytes);
-    msg_out.cols = image.cols;
-    msg_out.rows = image.rows;
-    msg_out.cv_type = image.type();
+    high_resolution_clock::time_point loop_begin_t = high_resolution_clock::now();
 
-    cout << "data copied\nsizeof(msg_out)=" << sizeof(msg_out) <<endl;
-    msg_out.send_time = high_resolution_clock::now();
-    CHECK(mq_send(mq,  (const char *) &msg_out, sizeof(msg_out), 0) != (mqd_t)-1);
-
-    string c;
-    cin >> c;
+    for(size_t i=0; i<=N_LOOPS; ++i)
+    {
+        msg_out.total_size = sizeInBytes;
+        memcpy(msg_out.image_data, image.data, sizeInBytes);
+        msg_out.cols = image.cols;
+        msg_out.rows = image.rows;
+        msg_out.cv_type = image.type();
+        msg_out.send_time = high_resolution_clock::now();
+        CHECK(mq_send(mq,  (const char *) &msg_out, sizeof(msg_out), 0) != (mqd_t)-1);
+        this_thread::sleep_for(milliseconds(1000/PRODUCER_RATE));
+        //cout << "msg sent\n";
+    }
+    cout <<"done\n";
+    cout << "loop finished\tavarage publish frequency: " << duration_cast<microseconds>(high_resolution_clock::now() - loop_begin_t).count()/N_LOOPS << endl;
+    // wait for user to close queue
     /* cleanup */
-    CHECK((mqd_t)-1 != mq_close(mq));
-    cout << "closing queue\n";
-    CHECK((mqd_t)-1 != mq_unlink(QUEUE_NAME));
-    cout << "unlinking queue\n";
+//    CHECK((mqd_t)-1 != mq_close(mq));
+//    cout << "closing queue\n";
+//    CHECK((mqd_t)-1 != mq_unlink(QUEUE_NAME));
+//    cout << "unlinking queue\n";
 
     return 0;
 }
