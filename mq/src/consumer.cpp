@@ -12,6 +12,8 @@
 #include <fstream>
 #include <chrono>
 #include <unistd.h>
+#include <vector>
+#include <sched.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -26,9 +28,14 @@ using namespace chrono;
 
 
 
+
+
 int main(int argc, char **argv)
 {
-    cout << "CONSUMER PROCESS PID: " << getpid() << endl;
+    // wektor 3 trybow szeregowania. w czasie dzialania programu bedziemy testowac wszystkie
+    vector<int> sched_options = get_sched_params();
+	
+
     rlimit limits;
     limits.rlim_max = QUEUE_SIZE_CEILING;
     limits.rlim_cur = MAX_QUEUE_SIZE;
@@ -37,7 +44,6 @@ int main(int argc, char **argv)
     int res = getrlimit(RLIMIT_MSGQUEUE,  &limits);
 
     printf("rlim_cur: %lu  rlim_max: %lu\n", limits.rlim_cur, limits.rlim_max);
-
 
     mqd_t mq;
     struct mq_attr attr;
@@ -51,43 +57,58 @@ int main(int argc, char **argv)
 
     /* create the message queue */
     mq = mq_open(QUEUE_NAME, O_CREAT | O_RDONLY, 0666, &attr);
-    if((mqd_t)-1 == mq)
-    {
-        cout << "Meesage queue with given name doesn't exist.\nSpawn producer first\n";
-        return -1;
-    }
+    CHECK((mqd_t)-1 != mq);
 
     int receive_code = 0;
-    ofstream time_log_file;
-    time_log_file.open("time_logs.csv");
-    time_log_file << "transfer_duration[us],processed_time\n";
-    cout <<"log file created\n" << "loop started \n...";
-
-    size_t n_loops = N_LOOPS;
-    high_resolution_clock::time_point loop_begin_t = high_resolution_clock::now();
-
-    for(size_t i=0; i<=N_LOOPS; ++i)
+    // kolejnosc: SCHED_OTHER -> SCHED_FIFO -> SCHED_RR
+    for(int i=0; i<sched_options.size(); i++)
     {
-        receive_code = mq_receive(mq, (char *) &msg_in, sizeof(msg_in)+1, NULL);
-        CHECK((mqd_t)-1 != receive_code);
+        /*
+	struct sched_param sp = { .sched_priority = sched_get_priority_max(SCHED_OTHER) };
+	int ret;
 
-        Mat img_received(msg_in.rows, msg_in.cols, msg_in.cv_type);
-        memcpy(img_received.data, msg_in.image_data, msg_in.total_size);
-        time_log_file << duration_cast<microseconds>(high_resolution_clock::now() - msg_in.send_time).count() << endl;
-        //cout << "msg received\n";
-    //    msg_out.total_size = sizeInBytes;
-    //    memcpy(msg_out.image_data, image.data, sizeInBytes);
-    //    msg_out.cols = image.cols;
-    //    msg_out.rows = image.rows;
-    //    msg_out.cv_type = image.type();
-    //    msg_out.send_time = high_resolution_clock::now();
-    //    CHECK(mq_send(mq,  (const char *) &msg_out, sizeof(msg_out), 0) != (mqd_t)-1);
-    //    this_thread::sleep_for(milliseconds(1000/PRODUCER_RATE));
+	//choose policy
+	ret = sched_setscheduler(pid, SCHED_OTHER, &sp);
+        */
+        struct sched_param sched_option = { .sched_priority = sched_get_priority_max(sched_options[i]) };
+
+        int active_policy = set_scheduler(sched_options[i], &sched_option);
+        string sched_option_str = get_sched_name(active_policy);
+
+        ofstream time_log_file;
+        vector<double> durations;
+        vector<double> wait_times;
+
+        string filename = sched_option_str+"_time_log.csv";
+
+        time_log_file.open(filename);
+
+        time_log_file << "transfer_duration[us],waiting_time[ms]\n";
+        cout <<"log file " << filename << " created\n" << "loop started \n...";
+
+        size_t n_loops = N_LOOPS;
+        high_resolution_clock::time_point loop_begin_t = high_resolution_clock::now();
+
+        for(size_t i=0; i<=N_LOOPS; ++i)
+        {
+            high_resolution_clock::time_point wait_begin = high_resolution_clock::now();
+            receive_code = mq_receive(mq, (char *) &msg_in, sizeof(msg_in)+1, NULL);
+            high_resolution_clock::time_point wait_end = high_resolution_clock::now();
+            CHECK((mqd_t)-1 != receive_code);
+            Mat img_received(msg_in.rows, msg_in.cols, msg_in.cv_type);
+            memcpy(img_received.data, msg_in.image_data, msg_in.total_size);
+            durations.push_back(duration_cast<microseconds>(high_resolution_clock::now() - msg_in.send_time).count());
+            wait_times.push_back(duration_cast<milliseconds>(wait_end- wait_begin).count());
+        }
+        cout << "done\n";
+        for(int i=0; i<N_LOOPS; i++)
+        {
+            time_log_file << durations[i] << "," << wait_times[i] << endl;
+        }
+        time_log_file.close();
+        cout << "loop finished\tavarage receive frequency: " << 1e-6 * duration_cast<microseconds>(high_resolution_clock::now() - loop_begin_t).count()/N_LOOPS << endl;
     }
-    cout << "done\n";
 
-    time_log_file.close();
-    cout << "loop finished\tavarage receive frequency: " << duration_cast<microseconds>(high_resolution_clock::now() - loop_begin_t).count()/N_LOOPS << endl;
 /*
     namedWindow( "Display window", WINDOW_AUTOSIZE );// Create a window for display.
     //Mat img_received(buf.rows, buf.cols, buf.type);
