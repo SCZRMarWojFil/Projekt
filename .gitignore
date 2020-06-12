@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+mq/bin/*
+mq/CMakeCache.txt
+mq/cmake_install.cmake
+mq/CMakeFiles/*
