@@ -203,6 +203,36 @@ src/display_image.cpp.s:
 	$(MAKE) -f CMakeFiles/display_test.dir/build.make CMakeFiles/display_test.dir/src/display_image.cpp.s
 .PHONY : src/display_image.cpp.s
 
+src/mq_utils.o: src/mq_utils.cpp.o
+
+.PHONY : src/mq_utils.o
+
+# target to build an object file
+src/mq_utils.cpp.o:
+	$(MAKE) -f CMakeFiles/consumer.dir/build.make CMakeFiles/consumer.dir/src/mq_utils.cpp.o
+	$(MAKE) -f CMakeFiles/producer.dir/build.make CMakeFiles/producer.dir/src/mq_utils.cpp.o
+.PHONY : src/mq_utils.cpp.o
+
+src/mq_utils.i: src/mq_utils.cpp.i
+
+.PHONY : src/mq_utils.i
+
+# target to preprocess a source file
+src/mq_utils.cpp.i:
+	$(MAKE) -f CMakeFiles/consumer.dir/build.make CMakeFiles/consumer.dir/src/mq_utils.cpp.i
+	$(MAKE) -f CMakeFiles/producer.dir/build.make CMakeFiles/producer.dir/src/mq_utils.cpp.i
+.PHONY : src/mq_utils.cpp.i
+
+src/mq_utils.s: src/mq_utils.cpp.s
+
+.PHONY : src/mq_utils.s
+
+# target to generate assembly for a file
+src/mq_utils.cpp.s:
+	$(MAKE) -f CMakeFiles/consumer.dir/build.make CMakeFiles/consumer.dir/src/mq_utils.cpp.s
+	$(MAKE) -f CMakeFiles/producer.dir/build.make CMakeFiles/producer.dir/src/mq_utils.cpp.s
+.PHONY : src/mq_utils.cpp.s
+
 src/producer.o: src/producer.cpp.o
 
 .PHONY : src/producer.o
@@ -247,6 +277,9 @@ help:
 	@echo "... src/display_image.o"
 	@echo "... src/display_image.i"
 	@echo "... src/display_image.s"
+	@echo "... src/mq_utils.o"
+	@echo "... src/mq_utils.i"
+	@echo "... src/mq_utils.s"
 	@echo "... src/producer.o"
 	@echo "... src/producer.i"
 	@echo "... src/producer.s"

@@ -22,5 +22,7 @@
         } \
     } while (0) \
 
+int print_current_mq_attributes(mqd_t mq);
+int set_rlimit();
 
 #endif /* #ifndef COMMON_H_ */

@@ -9,6 +9,7 @@
 #include <cstring>
 #include <string>
 #include <iostream>
+#include <chrono>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -18,6 +19,7 @@
 
 using namespace cv;
 using namespace std;
+using namespace chrono;
 
 Mat get_image(string image_path)
 {
@@ -36,16 +38,6 @@ Mat get_image(string image_path)
 
 int main(int argc, char **argv)
 {
-
-    rlimit limits;
-    limits.rlim_max = QUEUE_SIZE_CEILING;
-    limits.rlim_cur = MAX_QUEUE_SIZE;
-    CHECK(setrlimit(RLIMIT_MSGQUEUE, &limits) != -1);
-
-    int res = getrlimit(RLIMIT_MSGQUEUE,  &limits);
-
-    printf("rlim_cur: %lu  rlim_max: %lu\n", limits.rlim_cur, limits.rlim_max);
-
     mqd_t mq;
     struct mq_attr attr;
     msg_buffer msg_out;
@@ -61,30 +53,22 @@ int main(int argc, char **argv)
     CHECK((mqd_t)-1 != mq);
 
 
-    mq_getattr(mq, &attr);
-    printf("max_msgs: %lu, max_msg_size: %lu, current_msgs: %lu\n\n", attr.mq_maxmsg, attr.mq_msgsize, attr.mq_curmsgs);
-
     string image_path = "data/grafika-joker.jpg";
     Mat image = get_image(image_path);
     cout << "img size: " << image.size() <<endl;
-
-    //strcpy(msg_out.msg_text, "elo elo 320");
-    msg_out.msg_type = 'L';
 
     cout <<  "image.data size:" << sizeof(image.data)<< endl;
     size_t sizeInBytes = image.total() * image.elemSize();
     cout << "image total byte size: " << image.total() << endl;
     msg_out.total_size = sizeInBytes;
 
-    memcpy(msg_out.msg_text, image.data, sizeInBytes);
+    memcpy(msg_out.image_data, image.data, sizeInBytes);
     msg_out.cols = image.cols;
     msg_out.rows = image.rows;
     msg_out.cv_type = image.type();
 
     cout << "data copied\nsizeof(msg_out)=" << sizeof(msg_out) <<endl;
-//    printf("Address of mat.data is %p\n", (void *)image.data); 
-    //n = mq_receive(mq, (char *) &buf, sizeof(buf), NULL);
-//(const char *)
+    msg_out.send_time = high_resolution_clock::now();
     CHECK(mq_send(mq,  (const char *) &msg_out, sizeof(msg_out), 0) != (mqd_t)-1);
 
     string c;
