@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/marcel/Documents/SCZR_2020/Projekt/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-10   -isystem /usr/include/opencv  -g   -std=gnu++11 -o CMakeFiles/posix_consumer.dir/src/posix_consumer.cpp.o -c /home/marcel/Documents/SCZR_2020/Projekt/mq/src/posix_consumer.cpp",
+  "file": "/home/marcel/Documents/SCZR_2020/Projekt/mq/src/posix_consumer.cpp"
+},
+{
+  "directory": "/home/marcel/Documents/SCZR_2020/Projekt/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-10   -isystem /usr/include/opencv  -g   -std=gnu++11 -o CMakeFiles/posix_producer.dir/src/posix_producer.cpp.o -c /home/marcel/Documents/SCZR_2020/Projekt/mq/src/posix_producer.cpp",
+  "file": "/home/marcel/Documents/SCZR_2020/Projekt/mq/src/posix_producer.cpp"
+},
+{
+  "directory": "/home/marcel/Documents/SCZR_2020/Projekt/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-10   -isystem /usr/include/opencv  -g   -std=gnu++11 -o CMakeFiles/display_test.dir/src/display_image.cpp.o -c /home/marcel/Documents/SCZR_2020/Projekt/mq/src/display_image.cpp",
+  "file": "/home/marcel/Documents/SCZR_2020/Projekt/mq/src/display_image.cpp"
+},
+{
+  "directory": "/home/marcel/Documents/SCZR_2020/Projekt/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-10   -I/usr/include/opencv  -g   -std=gnu++11 -o CMakeFiles/consumer.dir/src/consumer.cpp.o -c /home/marcel/Documents/SCZR_2020/Projekt/mq/src/consumer.cpp",
+  "file": "/home/marcel/Documents/SCZR_2020/Projekt/mq/src/consumer.cpp"
+},
+{
+  "directory": "/home/marcel/Documents/SCZR_2020/Projekt/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-10   -isystem /usr/include/opencv  -g   -std=gnu++11 -o CMakeFiles/producer.dir/src/producer.cpp.o -c /home/marcel/Documents/SCZR_2020/Projekt/mq/src/producer.cpp",
+  "file": "/home/marcel/Documents/SCZR_2020/Projekt/mq/src/producer.cpp"
+}
+]

@@ -1,0 +1,7 @@
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/rebuild_cache.dir
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/edit_cache.dir
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/posix_consumer.dir
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/posix_producer.dir
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/display_test.dir
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/consumer.dir
+/home/marcel/Documents/SCZR_2020/Projekt/build/CMakeFiles/producer.dir
