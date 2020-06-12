@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/marcel/Documents/SCZR_2020/Projekt/mq
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -109,6 +109,45 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named shared_archiver
+
+# Build rule for target.
+shared_archiver: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shared_archiver
+.PHONY : shared_archiver
+
+# fast build rule for target.
+shared_archiver/fast:
+	$(MAKE) -f CMakeFiles/shared_archiver.dir/build.make CMakeFiles/shared_archiver.dir/build
+.PHONY : shared_archiver/fast
+
+#=============================================================================
+# Target rules for targets named shared_consumer
+
+# Build rule for target.
+shared_consumer: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shared_consumer
+.PHONY : shared_consumer
+
+# fast build rule for target.
+shared_consumer/fast:
+	$(MAKE) -f CMakeFiles/shared_consumer.dir/build.make CMakeFiles/shared_consumer.dir/build
+.PHONY : shared_consumer/fast
+
+#=============================================================================
+# Target rules for targets named shared_producer
+
+# Build rule for target.
+shared_producer: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 shared_producer
+.PHONY : shared_producer
+
+# fast build rule for target.
+shared_producer/fast:
+	$(MAKE) -f CMakeFiles/shared_producer.dir/build.make CMakeFiles/shared_producer.dir/build
+.PHONY : shared_producer/fast
 
 #=============================================================================
 # Target rules for targets named consumer
@@ -260,14 +299,98 @@ src/producer.cpp.s:
 	$(MAKE) -f CMakeFiles/producer.dir/build.make CMakeFiles/producer.dir/src/producer.cpp.s
 .PHONY : src/producer.cpp.s
 
+src/shared_archiver.o: src/shared_archiver.cpp.o
+
+.PHONY : src/shared_archiver.o
+
+# target to build an object file
+src/shared_archiver.cpp.o:
+	$(MAKE) -f CMakeFiles/shared_archiver.dir/build.make CMakeFiles/shared_archiver.dir/src/shared_archiver.cpp.o
+.PHONY : src/shared_archiver.cpp.o
+
+src/shared_archiver.i: src/shared_archiver.cpp.i
+
+.PHONY : src/shared_archiver.i
+
+# target to preprocess a source file
+src/shared_archiver.cpp.i:
+	$(MAKE) -f CMakeFiles/shared_archiver.dir/build.make CMakeFiles/shared_archiver.dir/src/shared_archiver.cpp.i
+.PHONY : src/shared_archiver.cpp.i
+
+src/shared_archiver.s: src/shared_archiver.cpp.s
+
+.PHONY : src/shared_archiver.s
+
+# target to generate assembly for a file
+src/shared_archiver.cpp.s:
+	$(MAKE) -f CMakeFiles/shared_archiver.dir/build.make CMakeFiles/shared_archiver.dir/src/shared_archiver.cpp.s
+.PHONY : src/shared_archiver.cpp.s
+
+src/shared_consumer.o: src/shared_consumer.cpp.o
+
+.PHONY : src/shared_consumer.o
+
+# target to build an object file
+src/shared_consumer.cpp.o:
+	$(MAKE) -f CMakeFiles/shared_consumer.dir/build.make CMakeFiles/shared_consumer.dir/src/shared_consumer.cpp.o
+.PHONY : src/shared_consumer.cpp.o
+
+src/shared_consumer.i: src/shared_consumer.cpp.i
+
+.PHONY : src/shared_consumer.i
+
+# target to preprocess a source file
+src/shared_consumer.cpp.i:
+	$(MAKE) -f CMakeFiles/shared_consumer.dir/build.make CMakeFiles/shared_consumer.dir/src/shared_consumer.cpp.i
+.PHONY : src/shared_consumer.cpp.i
+
+src/shared_consumer.s: src/shared_consumer.cpp.s
+
+.PHONY : src/shared_consumer.s
+
+# target to generate assembly for a file
+src/shared_consumer.cpp.s:
+	$(MAKE) -f CMakeFiles/shared_consumer.dir/build.make CMakeFiles/shared_consumer.dir/src/shared_consumer.cpp.s
+.PHONY : src/shared_consumer.cpp.s
+
+src/shared_producer.o: src/shared_producer.cpp.o
+
+.PHONY : src/shared_producer.o
+
+# target to build an object file
+src/shared_producer.cpp.o:
+	$(MAKE) -f CMakeFiles/shared_producer.dir/build.make CMakeFiles/shared_producer.dir/src/shared_producer.cpp.o
+.PHONY : src/shared_producer.cpp.o
+
+src/shared_producer.i: src/shared_producer.cpp.i
+
+.PHONY : src/shared_producer.i
+
+# target to preprocess a source file
+src/shared_producer.cpp.i:
+	$(MAKE) -f CMakeFiles/shared_producer.dir/build.make CMakeFiles/shared_producer.dir/src/shared_producer.cpp.i
+.PHONY : src/shared_producer.cpp.i
+
+src/shared_producer.s: src/shared_producer.cpp.s
+
+.PHONY : src/shared_producer.s
+
+# target to generate assembly for a file
+src/shared_producer.cpp.s:
+	$(MAKE) -f CMakeFiles/shared_producer.dir/build.make CMakeFiles/shared_producer.dir/src/shared_producer.cpp.s
+.PHONY : src/shared_producer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... shared_archiver"
+	@echo "... shared_consumer"
+	@echo "... rebuild_cache"
+	@echo "... shared_producer"
 	@echo "... consumer"
 	@echo "... producer"
 	@echo "... display_test"
@@ -283,6 +406,15 @@ help:
 	@echo "... src/producer.o"
 	@echo "... src/producer.i"
 	@echo "... src/producer.s"
+	@echo "... src/shared_archiver.o"
+	@echo "... src/shared_archiver.i"
+	@echo "... src/shared_archiver.s"
+	@echo "... src/shared_consumer.o"
+	@echo "... src/shared_consumer.i"
+	@echo "... src/shared_consumer.s"
+	@echo "... src/shared_producer.o"
+	@echo "... src/shared_producer.i"
+	@echo "... src/shared_producer.s"
 .PHONY : help
 
 

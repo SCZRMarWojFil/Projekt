@@ -1,0 +1,3 @@
+max_opoznienie: 565
+sredni czas transferu: 161.48544563369012
+std: 20.433706813650364
